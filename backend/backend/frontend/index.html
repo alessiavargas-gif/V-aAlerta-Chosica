@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VíaAlerta Chosica - Monitor Vial</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="styles.css">
+    <script src="https://cdn.jsdelivr.net/npm/@mediapipe/camera_utils/camera_utils.js" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@mediapipe/control_utils/control_utils.js" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@mediapipe/drawing_utils/drawing_utils.js" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@mediapipe/hands/hands.js" crossorigin="anonymous"></script>
+</head>
+<body class="bg-slate-900 text-white font-sans min-h-screen">
+
+    <header class="bg-slate-800 border-b border-slate-700 p-4 shadow-md">
+        <div class="max-w-6xl mx-auto flex justify-between items-center">
+            <div>
+                <h1 class="text-2xl font-bold text-amber-400">VíaAlerta Chosica</h1>
+                <p class="text-sm text-slate-300">Monitoreo de Huaicos y Vías - Carretera Central (Lima)</p>
+            </div>
+            <span class="bg-red-600/20 text-red-400 border border-red-500 px-3 py-1 rounded-full text-xs font-semibold animate-pulse">
+                EN VIVO • EL NIÑO
+            </span>
+        </div>
+    </header>
+
+    <main class="max-w-6xl mx-auto p-4 grid grid-cols-1 lg:grid-cols-2 gap-6 mt-4">
+        
+        <section class="bg-slate-800 p-5 rounded-xl border border-slate-700 shadow-lg">
+            <h2 class="text-lg font-semibold text-amber-400 mb-2">1. Reporte Manos Libres (Cámara Web)</h2>
+            <p class="text-sm text-slate-300 mb-4">
+                Muestra la <strong>palma abierta</strong> frente a la cámara durante 2 segundos para emitir una alerta de vía bloqueada sin tocar la pantalla.
+            </p>
+
+            <div class="mb-4">
+                <label for="zonaSelect" class="block text-xs text-slate-400 mb-1">Ubicación actual en Chosica:</label>
+                <select id="zonaSelect" class="w-full bg-slate-900 border border-slate-600 rounded-lg p-2 text-sm text-white">
+                    <option value="Quebrada Rayos de Sol - Chosica">Quebrada Rayos de Sol - Chosica</option>
+                    <option value="Puente Los Ángeles - Carretera Central">Puente Los Ángeles - Carretera Central</option>
+                    <option value="Quebrada Carossio - Chosica">Quebrada Carossio - Chosica</option>
+                    <option value="Plaza de Armas de Lurigancho-Chosica">Plaza de Armas de Lurigancho-Chosica</option>
+                </select>
+            </div>
+
+            <div class="relative w-full aspect-video bg-black rounded-lg overflow-hidden border-2 border-slate-600">
+                <video id="input_video" class="hidden" autoplay playsinline></video>
+                <canvas id="output_canvas" class="w-full h-full object-cover"></canvas>
+                <div id="estadoCamara" class="absolute bottom-3 left-3 bg-slate-900/80 px-3 py-1 rounded text-xs text-amber-300">
+                    Iniciando cámara y modelo gestual...
+                </div>
+            </div>
+
+            <div class="mt-4">
+                <div class="flex justify-between text-xs mb-1">
+                    <span id="textoGesto" class="text-slate-300">Esperando gesto de mano abierta...</span>
+                    <span id="porcentajeGesto" class="font-bold text-amber-400">0%</span>
+                </div>
+                <div class="w-full bg-slate-700 rounded-full h-2.5">
+                    <div id="barraProgreso" class="bg-red-500 h-2.5 rounded-full transition-all duration-150" style="width: 0%"></div>
+                </div>
+            </div>
+        </section>
+
+        <section class="bg-slate-800 p-5 rounded-xl border border-slate-700 shadow-lg flex flex-col">
+            <div class="flex justify-between items-center mb-4">
+                <h2 class="text-lg font-semibold text-amber-400">2. Estado de la Carretera Central</h2>
+                <button onclick="cargarAlertas()" class="text-xs bg-slate-700 hover:bg-slate-600 px-3 py-1.5 rounded-lg transition">
+                    Actualizar
+                </button>
+            </div>
+            
+            <div id="listaAlertas" class="space-y-3 overflow-y-auto max-h-[450px] pr-1">
+            </div>
+        </section>
+
+    </main>
+
+    <script src="app.js"></script>
+</body>
+</html>
